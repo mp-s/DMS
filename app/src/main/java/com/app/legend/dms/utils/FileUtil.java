@@ -42,7 +42,7 @@ public class FileUtil {
 
     }
     public static void downloadFile(Context context){
-        NetUtil.download("http://comic.legic.xyz/comic/comic",context,"comic");
+        NetUtil.download("http://bk.hzpdesu.com/comic/comic",context,"comic");
 //        NetUtil.download("http://comic.legic.xyz/comic/chapter",context,"chapter");
 
     }
