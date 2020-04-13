@@ -49,8 +49,8 @@ public class FileUtil {
     }
 
     public static void downloadFileByOne(Context context){
-        NetUtil.downloadFileByOne("https://github.com/mp-s/DMS/releases/download/comic_20200411/comic",context,"comic");
-//        NetUtil.downloadFileByOne("http://comic.legic.xyz/comic/comic",context,"comic");
+//        NetUtil.downloadFileByOne("https://github.com/mp-s/DMS/releases/download/comic_20200411/comic",context,"comic");
+        NetUtil.downloadFileByOne("http://bk.hzpdesu.com/comic/comic",context,"comic");
 //        NetUtil.downloadFileByOne("http://comic.legic.xyz/comic/chapter",context,"chapter");
 
     }
