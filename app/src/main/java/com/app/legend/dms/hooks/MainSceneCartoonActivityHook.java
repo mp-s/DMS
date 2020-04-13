@@ -2,7 +2,7 @@ package com.app.legend.dms.hooks;
 
 
 import android.app.Activity;
-import android.content.pm.ApplicationInfo;
+import android.support.v4.view.ViewPager;
 
 import com.app.legend.dms.utils.Conf;
 import com.app.legend.dms.utils.FileUtil;
@@ -173,7 +173,7 @@ public class MainSceneCartoonActivityHook extends BaseHook implements IXposedHoo
 
                 XposedHelpers.callMethod(viewPager, "setOffscreenPageLimit", 2);
 
-//                XposedBridge.log("设置成功！！！！！！！");
+                XposedBridge.log("设置成功！！！！！！！");
             }
         });
 
