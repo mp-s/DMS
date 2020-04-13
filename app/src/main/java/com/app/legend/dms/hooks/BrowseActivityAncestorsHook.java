@@ -92,7 +92,7 @@ public class BrowseActivityAncestorsHook extends BaseHook implements IXposedHook
 
                         String savePath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+name;
 
-                        XposedBridge.log("save---->>"+savePath);
+                        XposedBridge.log("release save---->>"+savePath);
 
 
                         boolean r= ZipUtils.fixSaveLocalImage(file,oneName,savePath,AndroidAppHelper.currentApplication());
@@ -133,7 +133,7 @@ public class BrowseActivityAncestorsHook extends BaseHook implements IXposedHook
     private void offsetBottomText(TextView textView){
 
         if (textView==null){
-            XposedBridge.log("the textview is null!!");
+            XposedBridge.log("release--->> the textview is null!!");
             return;
         }
 

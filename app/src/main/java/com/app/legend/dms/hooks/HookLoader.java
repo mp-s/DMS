@@ -65,7 +65,7 @@ public class HookLoader implements IXposedHookLoadPackage {
 
         init(CartoonInstructionActivityHook.class.getName());
 
-//        init(SplashAdHook.class.getName());
+        init(SplashAdHook.class.getName());
 
         init(MainSceneCartoonActivityHook.class.getName());
         init(HideFragmentHook.class.getName());
@@ -78,6 +78,8 @@ public class HookLoader implements IXposedHookLoadPackage {
 //        init(DownLoadLoadingActivityHook.class.getName());
 
         init(BrowseActivityAncestorsHook.class.getName());
+
+        init(CartoonInstrctionListActivityHook.class.getName());
 
 //        init(HttpHostHook.class.getName());
 //        init();

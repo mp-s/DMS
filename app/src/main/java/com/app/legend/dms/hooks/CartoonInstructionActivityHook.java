@@ -285,7 +285,7 @@ public class CartoonInstructionActivityHook extends BaseHook implements IXposedH
 
         RequestBody body=RequestBody.create(MediaType.parse("application/json;charset=utf-8"),jsonObject.toString());
 
-        XposedBridge.log(url);
+        XposedBridge.log("release--->>" + url);
 
         Request request=new Request.Builder().url(url).post(body).build();
 
