@@ -27,8 +27,8 @@ public class HttpHostHook extends BaseHook implements IXposedHookLoadPackage {
 
                 String h= (String) param.args[0];
                 int p= (int) param.args[1];
-                XposedBridge.log("port---->>>"+p);
-                XposedBridge.log("host---->>>"+h);
+                XposedBridge.log("release--->> port---->>>"+p);
+                XposedBridge.log("release--->> host---->>>"+h);
 
                 if (p!=-1){//检测到原APP访问网络时会有端口为-1的情况，那个应该是不走代理的，故不做改变
                     param.args[0]="192.168.0.7";

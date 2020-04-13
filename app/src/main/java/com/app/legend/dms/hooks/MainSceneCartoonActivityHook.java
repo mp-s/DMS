@@ -171,9 +171,9 @@ public class MainSceneCartoonActivityHook extends BaseHook implements IXposedHoo
 
                 Object viewPager = XposedHelpers.getObjectField(param.thisObject, "mPager");
 
-                XposedHelpers.callMethod(viewPager, "setOffscreenPageLimit", 2);
+                XposedHelpers.callMethod(viewPager, "setOffscreenPageLimit", 1);
 
-                XposedBridge.log("设置成功！！！！！！！");
+                XposedBridge.log("release--->> viewPager 设置成功！！！！！！！");
             }
         });
 

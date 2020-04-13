@@ -251,7 +251,7 @@ public class MineCartoonDownActivityHook extends BaseHook implements IXposedHook
 
         if (this.sqLiteDatabase == null) {
 
-            XposedBridge.log("数据库没有实例化");
+            XposedBridge.log("release--->> 数据库没有实例化");
 
             return null;
         }
