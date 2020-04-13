@@ -44,7 +44,13 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
 
     private static final String CLASS = "com.dmzj.manhua.ui.uifragment.CartoonClassifyFragment";
 
-    private static final String CLASS2 = "com.dmzj.manhua.ui.MainSceneCartoonActivity$1";//hook OnPageChangeListener
+    private static final String CLASS2_017 = "com.dmzj.manhua.ui.MainSceneCartoonActivity$1";//hook OnPageChangeListener
+    private static final String CLASS2_022 = "com.dmzj.manhua.ui.home.MainSceneCartoonActivity$1";//hook OnPageChangeListener
+    private static String CLASS2;
+
+    private static final String CLASS3_017 = "com.dmzj.manhua.ui.MainSceneCartoonActivity";
+    private static final String CLASS3_022 = "com.dmzj.manhua.ui.home.MainSceneCartoonActivity";
+    private static String CLASS3;
 
     private boolean isHook = false;//标记是否被hook，用于判断是否占有这个class
 
@@ -72,7 +78,20 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
         if (!lpparam.packageName.equals(Conf.PACKAGE)) {
             return;
         }
-
+        Class<?> clz1 = XposedHelpers.findClassIfExists(CLASS2_017, lpparam.classLoader);
+        Class<?> clz2 = XposedHelpers.findClassIfExists(CLASS2_022, lpparam.classLoader);
+        if (clz1 != null) {
+            XposedBridge.log("--- Founded 013~017!");
+            CLASS2 = CLASS2_017;
+            CLASS3 = CLASS3_017;
+        } else if (clz2 != null) {
+            XposedBridge.log("--- Founded 018~022 !");
+            CLASS2 = CLASS2_022;
+            CLASS3 = CLASS3_022;
+        } else {
+            XposedBridge.log("-- 023+? or 013-?");
+            return;
+        }
 
         /*hook布局，一开始将布局给替换*/
         XposedHelpers.findAndHookMethod(CLASS, lpparam.classLoader, "createContent",
@@ -130,7 +149,7 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
         });
 
         /*获取上帝对象*/
-        XposedHelpers.findAndHookMethod("com.dmzj.manhua.ui.MainSceneCartoonActivity",
+        XposedHelpers.findAndHookMethod(CLASS3,
                 lpparam.classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {

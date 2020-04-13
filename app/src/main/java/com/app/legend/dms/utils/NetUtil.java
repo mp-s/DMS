@@ -40,7 +40,7 @@ public class NetUtil {
 
                 if (o<3){
 
-                    download("https://github.com/liuzhushaonian/release/releases/download/comic/comic",context,name);
+                    download("https://github.com/mp-s/DMS/releases/download/comic_20200411/comic",context,name);
                     o++;
                 }
             }
