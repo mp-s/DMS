@@ -164,18 +164,18 @@ public class MainSceneCartoonActivityHook extends BaseHook implements IXposedHoo
         /**
          * 设置viewpager的limit，避免不显示
          */
-        XposedHelpers.findAndHookMethod(CLASS2, classLoader, "initData", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                super.afterHookedMethod(param);
-
-                Object viewPager = XposedHelpers.getObjectField(param.thisObject, "mPager");
-
-                XposedHelpers.callMethod(viewPager, "setOffscreenPageLimit", 2);
-
+//        XposedHelpers.findAndHookMethod(CLASS2, classLoader, "initData", new XC_MethodHook() {
+//            @Override
+//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                super.afterHookedMethod(param);
+//
+//                Object viewPager = XposedHelpers.getObjectField(param.thisObject, "mPager");
+//
+//                XposedHelpers.callMethod(viewPager, "setOffscreenPageLimit", 2);
+//
 //                XposedBridge.log("设置成功！！！！！！！");
-            }
-        });
+//            }
+//        });
 
     }
 
