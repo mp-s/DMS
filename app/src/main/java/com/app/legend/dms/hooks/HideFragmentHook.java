@@ -82,15 +82,15 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
         Class<?> clz017 = XposedHelpers.findClassIfExists(CLASS2_017, lpparam.classLoader);
         Class<?> clz022 = XposedHelpers.findClassIfExists(CLASS2_022, lpparam.classLoader);
         if (clz017 != null) {
-            XposedBridge.log("--- hidefragment Founded 013~017!");
+            XposedBridge.log("release--->> hidefragment Founded 013~017!");
             CLASS2 = CLASS2_017;
             CLASS3 = CLASS3_017;
         } else if (clz022 != null) {
-            XposedBridge.log("--- hidefragment Founded 018~022 !");
+            XposedBridge.log("release--->> hidefragment Founded 018~022 !");
             CLASS2 = CLASS2_022;
             CLASS3 = CLASS3_022;
         } else {
-            XposedBridge.log("-- 023+? or 013-?");
+            XposedBridge.log("release--->> 023+? or 013-?");
             return;
         }
 
@@ -155,7 +155,7 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);
-        XposedBridge.log("-> release: Hooked CLASS3  " + CLASS3);
+        XposedBridge.log("release--->> Hooked CLASS3  " + CLASS3);
                 activity = (Activity) param.thisObject;
             }
         });
@@ -166,7 +166,7 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 super.beforeHookedMethod(param);
-XposedBridge.log("-> release: Hooked CLASS2  " + CLASS2);
+XposedBridge.log("release--->> Hooked CLASS2  " + CLASS2);
                 int i = (int) param.args[0];
 
                 if (i == 3) {//不hook

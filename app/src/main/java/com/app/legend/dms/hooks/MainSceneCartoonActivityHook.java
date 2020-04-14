@@ -43,17 +43,17 @@ public class MainSceneCartoonActivityHook extends BaseHook implements IXposedHoo
         Class<?> clz1 = XposedHelpers.findClassIfExists(CLASS_017, lpparam.classLoader);
         Class<?> clz2 = XposedHelpers.findClassIfExists(CLASS_022, lpparam.classLoader);
         if (clz1 != null) {
-            XposedBridge.log("--- Founded 013~017!");
+            XposedBridge.log("release--->> Founded 013~017!");
             CLASS = CLASS_017;
             CLASS2 = CLASS2_017;
             CLASS3 = CLASS3_017;
         } else if (clz2 != null) {
-            XposedBridge.log("--- Founded 018~022 !");
+            XposedBridge.log("release--->> Founded 018+ !");
             CLASS = CLASS_022;
             CLASS2 = CLASS2_022;
             CLASS3 = CLASS3_022;
         } else {
-            XposedBridge.log("-- 023+? or 013-?");
+            XposedBridge.log("release--->> 023+? or 013-?");
             return;
         }
         init(lpparam.classLoader);
@@ -155,7 +155,7 @@ public class MainSceneCartoonActivityHook extends BaseHook implements IXposedHoo
                     @Override
                     protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
 
-                        XposedBridge.log("release--->>阻止升级弹窗！");
+                        XposedBridge.log("release--->> 阻止升级弹窗！");
 
                         return null;
                     }
@@ -170,9 +170,7 @@ public class MainSceneCartoonActivityHook extends BaseHook implements IXposedHoo
                 super.afterHookedMethod(param);
 
                 Object viewPager = XposedHelpers.getObjectField(param.thisObject, "mPager");
-
                 XposedHelpers.callMethod(viewPager, "setOffscreenPageLimit", 1);
-
                 XposedBridge.log("release--->> viewPager 设置成功！！！！！！！");
             }
         });

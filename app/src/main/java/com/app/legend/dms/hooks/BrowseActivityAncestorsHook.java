@@ -92,7 +92,7 @@ public class BrowseActivityAncestorsHook extends BaseHook implements IXposedHook
 
                         String savePath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+name;
 
-                        XposedBridge.log("release save---->>"+savePath);
+                        XposedBridge.log("release ---->> save "+savePath);
 
 
                         boolean r= ZipUtils.fixSaveLocalImage(file,oneName,savePath,AndroidAppHelper.currentApplication());
