@@ -78,9 +78,36 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
         if (!lpparam.packageName.equals(Conf.PACKAGE)) {
             return;
         }
-        Class<?> classFragment = XposedHelpers.findClass(CLASS, lpparam.classLoader);
-        Class<?> clz017 = XposedHelpers.findClassIfExists(CLASS2_017, lpparam.classLoader);
-        Class<?> clz022 = XposedHelpers.findClassIfExists(CLASS2_022, lpparam.classLoader);
+
+        /**
+         *  破除 360 加固
+         * */
+        Class<?> clazzStub = XposedHelpers.findClassIfExists("com.stub.StubApp", lpparam.classLoader);
+        if (clazzStub != null) {
+            XposedHelpers.findAndHookMethod(clazzStub, "attachBaseContext", Context.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+
+                    Context context = (Context) param.args[0];
+                    _classLoader = context.getClassLoader();
+                    XposedBridge.log("release--->> get Stub success!  " + CLASS);
+                    checkVersion(_classLoader);
+                }
+            });
+        } else {
+            _classLoader = lpparam.classLoader;
+            XposedBridge.log("release--->> get origin classLoader success!  " + CLASS);
+            checkVersion(_classLoader);
+        }
+
+    }
+
+    @Override
+    protected void checkVersion(ClassLoader classLoader) {
+        Class<?> classFragment = XposedHelpers.findClass(CLASS, classLoader);
+        Class<?> clz017 = XposedHelpers.findClassIfExists(CLASS2_017, classLoader);
+        Class<?> clz022 = XposedHelpers.findClassIfExists(CLASS2_022, classLoader);
         if (clz017 != null) {
             XposedBridge.log("release--->> hidefragment Founded 013~017!");
             CLASS2 = CLASS2_017;
@@ -93,9 +120,14 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
             XposedBridge.log("release--->> 023+? or 013-?");
             return;
         }
+        init(_classLoader);
 
+    }
+
+    @Override
+    protected void init(ClassLoader classLoader) {
         /*hook布局，一开始将布局给替换*/
-        XposedHelpers.findAndHookMethod(classFragment, "createContent",
+        XposedHelpers.findAndHookMethod(CLASS, classLoader, "createContent",
                 LayoutInflater.class, ViewGroup.class, Bundle.class,
                 new XC_MethodHook() {
             @Override
@@ -113,7 +145,7 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
          * 占巢
          * 接收对象开始
          */
-        XposedHelpers.findAndHookMethod(classFragment, "analysisData", Object.class, new XC_MethodReplacement() {
+        XposedHelpers.findAndHookMethod(CLASS, classLoader, "analysisData", Object.class, new XC_MethodReplacement() {
             @Override
             protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
 
@@ -136,7 +168,7 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
         /**
          *
          */
-        XposedHelpers.findAndHookMethod(classFragment, "loadData", boolean.class, new XC_MethodReplacement() {
+        XposedHelpers.findAndHookMethod(CLASS, classLoader, "loadData", boolean.class, new XC_MethodReplacement() {
             @Override
             protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
 
@@ -150,8 +182,7 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
         });
 
         /*获取上帝对象*/
-        XposedHelpers.findAndHookMethod(CLASS3,
-                lpparam.classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(CLASS3, classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);
@@ -161,7 +192,7 @@ public class HideFragmentHook extends BaseHook implements IXposedHookLoadPackage
         });
 
         /*监听滑动，在需要的地方切换isHook*/
-        XposedHelpers.findAndHookMethod(CLASS2, lpparam.classLoader, "onPageSelected",
+        XposedHelpers.findAndHookMethod(CLASS2, classLoader, "onPageSelected",
                 int.class, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -185,7 +216,7 @@ XposedBridge.log("release--->> Hooked CLASS2  " + CLASS2);
 
                     initView();//初始化view
 
-                    loader = lpparam.classLoader;
+                    loader = classLoader;
 
                 }
             }

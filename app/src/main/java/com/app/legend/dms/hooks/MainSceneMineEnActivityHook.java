@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import okhttp3.Call;
@@ -30,21 +31,46 @@ public class MainSceneMineEnActivityHook extends BaseHook implements IXposedHook
 
     private static final String CLASS="com.dmzj.manhua.ui.home.MainSceneMineEnActivity";
 
-
-
     private Activity activity;
+
+    protected ClassLoader _classLoader;
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        if (!lpparam.packageName.equals(Conf.PACKAGE)){
+        if (!lpparam.packageName.equals(Conf.PACKAGE)) {
             return;
         }
+        /**
+         *  破除 360 加固
+         * */
+        Class<?> clazzStub = XposedHelpers.findClassIfExists("com.stub.StubApp", lpparam.classLoader);
+        if (clazzStub != null) {
+            XposedHelpers.findAndHookMethod(clazzStub, "attachBaseContext", Context.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
 
+                    Context context = (Context) param.args[0];
+                    _classLoader = context.getClassLoader();
+                    XposedBridge.log("release--->> get Stub success!  " + CLASS);
+                    init(_classLoader);
+                }
+            });
+        } else {
+            _classLoader = lpparam.classLoader;
+            XposedBridge.log("release--->> get origin classLoader success!  " + CLASS);
+            init(_classLoader);
+        }
+
+    }
+
+    @Override
+    protected void init(ClassLoader classLoader) {
         /**
          * findviewbyid，初始化控件的时候
          */
-        XposedHelpers.findAndHookMethod(CLASS, lpparam.classLoader, "findViews", new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(CLASS, classLoader, "findViews", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);

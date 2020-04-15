@@ -3,6 +3,7 @@ package com.app.legend.dms.hooks;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AndroidAppHelper;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -72,22 +73,47 @@ public class CartoonInstructionActivityHook extends BaseHook implements IXposedH
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        if (!lpparam.packageName.equals(Conf.PACKAGE)){
+        if (!lpparam.packageName.equals(Conf.PACKAGE)) {
             return;
         }
+        /**
+         *  破除 360 加固
+         * */
+        Class<?> clazzStub = XposedHelpers.findClassIfExists("com.stub.StubApp", lpparam.classLoader);
+        if (clazzStub != null) {
+            XposedHelpers.findAndHookMethod(clazzStub, "attachBaseContext", Context.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
 
-        XposedHelpers.findAndHookMethod(CLASS, lpparam.classLoader, "initData", new XC_MethodHook() {
+                    Context context = (Context) param.args[0];
+                    _classLoader = context.getClassLoader();
+                    XposedBridge.log("release--->> get Stub success!  " + CLASS);
+                    init(_classLoader);
+                }
+            });
+        } else {
+            _classLoader = lpparam.classLoader;
+            XposedBridge.log("release--->> get origin classLoader success!  " + CLASS);
+            init(_classLoader);
+        }
+
+    }
+
+    @Override
+    protected void init(ClassLoader classLoader) {
+        XposedHelpers.findAndHookMethod(CLASS, classLoader, "initData", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);
 
-                Activity activity= (Activity) param.thisObject;
-                Intent intent=activity.getIntent();
+                Activity activity = (Activity) param.thisObject;
+                Intent intent = activity.getIntent();
 
-                if (intent!=null){
+                if (intent != null) {
 
-                    id=intent.getStringExtra("intent_extra_cid");
-                    name=intent.getStringExtra("intent_extra_cname");
+                    id = intent.getStringExtra("intent_extra_cid");
+                    name = intent.getStringExtra("intent_extra_cname");
 
                 }
 
@@ -155,7 +181,7 @@ public class CartoonInstructionActivityHook extends BaseHook implements IXposedH
         });
 
 
-        XposedHelpers.findAndHookMethod(CLASS, lpparam.classLoader, "onResume", new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(CLASS, classLoader, "onResume", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);
@@ -176,7 +202,7 @@ public class CartoonInstructionActivityHook extends BaseHook implements IXposedH
          *
          */
 
-        XposedHelpers.findAndHookMethod(CLASS, lpparam.classLoader, "refresh", boolean.class, new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(CLASS, classLoader, "refresh", boolean.class, new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 super.beforeHookedMethod(param);
@@ -185,7 +211,7 @@ public class CartoonInstructionActivityHook extends BaseHook implements IXposedH
         });
 
 
-        XposedHelpers.findAndHookMethod(CLASS, lpparam.classLoader, "refresh", boolean.class, new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod(CLASS, classLoader, "refresh", boolean.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);

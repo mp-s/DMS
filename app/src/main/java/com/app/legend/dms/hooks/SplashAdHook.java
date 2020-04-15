@@ -34,7 +34,7 @@ public class SplashAdHook extends BaseHook implements IXposedHookLoadPackage {
         /**
          * 021-022
          */
-        final Class<?> clazz = XposedHelpers.findClass(CLASS, lpparam.classLoader);
+        final Class<?> clazz = XposedHelpers.findClassIfExists(CLASS, lpparam.classLoader);
         if (clazz == null) {
             XposedBridge.log("release--->> 360加固, 跳过hook");
             return;

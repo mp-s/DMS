@@ -2,6 +2,7 @@ package com.app.legend.dms.hooks;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.view.ViewPager;
 
 import com.app.legend.dms.utils.Conf;
@@ -35,13 +36,41 @@ public class MainSceneCartoonActivityHook extends BaseHook implements IXposedHoo
     private static String CLASS2;
     private static String CLASS3;
 
+    protected ClassLoader _classLoader;
+
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals(Conf.PACKAGE)) {
             return;
         }
-        Class<?> clz1 = XposedHelpers.findClassIfExists(CLASS_017, lpparam.classLoader);
-        Class<?> clz2 = XposedHelpers.findClassIfExists(CLASS_022, lpparam.classLoader);
+
+        /**
+         *  破除 360 加固
+         * */
+        Class<?> clazzStub = XposedHelpers.findClassIfExists("com.stub.StubApp", lpparam.classLoader);
+        if (clazzStub != null) {
+            XposedHelpers.findAndHookMethod(clazzStub, "attachBaseContext", Context.class, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                    super.afterHookedMethod(param);
+
+                    Context context = (Context) param.args[0];
+                    _classLoader = context.getClassLoader();
+                    XposedBridge.log("release--->> get Stub success!  " + CLASS);
+                    checkVersion(_classLoader);
+                }
+            });
+        } else {
+            _classLoader = lpparam.classLoader;
+            XposedBridge.log("release--->> get origin classLoader success!  " + CLASS);
+            checkVersion(_classLoader);
+        }
+    }
+
+    @Override
+    protected void checkVersion(ClassLoader classLoader) {
+        Class<?> clz1 = XposedHelpers.findClassIfExists(CLASS_017, classLoader);
+        Class<?> clz2 = XposedHelpers.findClassIfExists(CLASS_022, classLoader);
         if (clz1 != null) {
             XposedBridge.log("release--->> Founded 013~017!");
             CLASS = CLASS_017;
@@ -56,10 +85,11 @@ public class MainSceneCartoonActivityHook extends BaseHook implements IXposedHoo
             XposedBridge.log("release--->> 023+? or 013-?");
             return;
         }
-        init(lpparam.classLoader);
+        init(classLoader);
     }
 
-    public void init(ClassLoader classLoader) {
+    @Override
+    protected void init(ClassLoader classLoader) {
         /*添加封印界面*/
         XposedHelpers.findAndHookMethod(CLASS, classLoader, "getNaviItem", int.class, new XC_MethodHook() {
             @Override
