@@ -53,7 +53,7 @@ public class CartoonInstrctionListActivityHook extends BaseHook implements IXpos
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);
 
-                XposedBridge.log(param.thisObject.toString());
+                XposedBridge.log("release--->> " + param.thisObject.toString());
 
             }
         });

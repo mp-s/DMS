@@ -11,8 +11,8 @@ android {
         applicationId "com.app.mps.dms"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 18
-        versionName "0.22.v1"
+        versionCode 19
+        versionName "0.22.v2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     testImplementation 'junit:junit:4.12'
     compileOnly 'de.robv.android.xposed:api:82'
-    implementation 'com.squareup.okhttp3:okhttp:4.1.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
